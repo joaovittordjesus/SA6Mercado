@@ -118,7 +118,12 @@ public class ProdutoDAO {
         try (PreparedStatement stmt = this.connection.prepareStatement(sql)) {
             stmt.setString(1, nome);
             stmt.setString(2, preco);
-            stmt.setInt(3, quantidade);
+            
+            //stmt.setInt(3, quantidade);
+            //Covertendo a string de preço para DigDecimal antes de definir o parâmetro
+            BigDecimal precoDecimal = new BigDecimal(preco);
+            stmt.setBigDecimal(3, precoDecimal);
+            
             stmt.setString(4, codigoBarras);
             stmt.executeUpdate();
             System.out.println("Produto atualizado com sucesso.");
