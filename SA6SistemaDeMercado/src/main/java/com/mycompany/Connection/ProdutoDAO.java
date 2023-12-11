@@ -1,6 +1,7 @@
 package com.mycompany.Connection;
 
 import com.mycompany.Model.Produto;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -77,8 +78,26 @@ public class ProdutoDAO {
         }
         return produtos;
     }
+    
+    public void cadastrar(String codigoBarras, String nome, String preco, int quantidade) {
+    String sql = "INSERT INTO produtos_mercado (CODIGO_BARRAS, NOME, PRECO, QUANTIDADE) VALUES (?, ?, ?, ?)";
+    try (PreparedStatement stmt = this.connection.prepareStatement(sql)) {
+        stmt.setString(1, codigoBarras);
+        stmt.setString(2, nome);
 
-    // Método para cadastrar um novo produto no banco de dados
+        // Convertendo a string de preço para BigDecimal antes de definir o parâmetro.
+        BigDecimal precoDecimal = new BigDecimal(preco);
+        stmt.setBigDecimal(3, precoDecimal);
+
+        stmt.setInt(4, quantidade);
+        stmt.executeUpdate();
+        System.out.println("Produto cadastrado com sucesso.");
+    } catch (SQLException | NumberFormatException e) {
+        throw new RuntimeException("Erro ao cadastrar produto: " + e.getMessage(), e);
+    }
+}
+
+    /*// Método para cadastrar um novo produto no banco de dados
     public void cadastrar(String codigoBarras, String nome, String preco, int quantidade) {
         String sql = "INSERT INTO produtos_mercado (CODIGO_BARRAS, NOME, PRECO, QUANTIDADE) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = this.connection.prepareStatement(sql)) {
@@ -91,7 +110,7 @@ public class ProdutoDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao cadastrar produto: " + e.getMessage(), e);
         }
-    }
+    }*/
 
     // Método para atualizar um produto no banco de dados
     public void atualizar(String codigoBarras, String nome, String preco, int quantidade) {
