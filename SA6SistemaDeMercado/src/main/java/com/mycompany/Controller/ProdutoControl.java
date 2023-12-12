@@ -1,6 +1,5 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * Esta classe é responsável por controlar as interações entre a interface de usuário (tabela) e a camada de persistência de dados (DAO).
  */
 package com.mycompany.Controller;
 
@@ -13,39 +12,55 @@ import java.util.List;
 
 public class ProdutoControl {
 
-    private final DefaultTableModel tableModel;
-    private final JTable table;
+    private final DefaultTableModel tableModel; // O modelo de tabela que será atualizado
+    private final JTable table; // A tabela que exibe os dados
 
+    // Construtor que recebe o modelo de tabela e a tabela como parâmetros
     public ProdutoControl(DefaultTableModel tableModel, JTable table) {
         this.tableModel = tableModel;
         this.table = table;
     }
 
+    // Método para atualizar a tabela com os dados mais recentes do banco de dados
     public void atualizarTabela() {
+        // Obtém a lista de todos os produtos do banco de dados usando o ProdutoDAO
         List<Produto> produtos = new ProdutoDAO().listarTodos();
+        // Atualiza o modelo de tabela com os dados obtidos
         atualizarTableModel(produtos);
     }
 
+    // Método privado para atualizar o modelo de tabela com uma lista de produtos
     private void atualizarTableModel(List<Produto> produtos) {
+        // Limpa todas as linhas existentes na tabela
         tableModel.setRowCount(0);
+        // Adiciona as novas linhas com os dados dos produtos à tabela
         for (Produto produto : produtos) {
             tableModel.addRow(new Object[]{produto.getCodigoBarras(), produto.getNome(),
                     produto.getPreco(), produto.getQuantidade()});
         }
     }
 
+    // Método para cadastrar um novo produto no banco de dados e atualizar a tabela
     public void cadastrar(String codigoBarras, String nome, String preco, int quantidade) {
+        // Chama o método de cadastro do ProdutoDAO
         new ProdutoDAO().cadastrar(codigoBarras, nome, preco, quantidade);
+        // Atualiza a tabela após o cadastro
         atualizarTabela();
     }
 
+    // Método para editar um produto existente no banco de dados e atualizar a tabela
     public void editar(String codigoBarras, String nome, String preco, int quantidade) {
+        // Chama o método de atualização do ProdutoDAO
         new ProdutoDAO().atualizar(codigoBarras, nome, preco, quantidade);
+        // Atualiza a tabela após a edição
         atualizarTabela();
     }
 
+    // Método para apagar um produto do banco de dados e atualizar a tabela
     public void apagar(String codigoBarras) {
+        // Chama o método de exclusão do ProdutoDAO
         new ProdutoDAO().apagar(codigoBarras);
+        // Atualiza a tabela após a exclusão
         atualizarTabela();
     }
 }
