@@ -12,20 +12,25 @@ import javax.swing.JPanel;
 import java.util.List;
 
 public class VendasView extends JPanel {
-    JComboBox<String> produtosComboBox;
-    List<Produto> produtos;
+    JComboBox<String> produtosComboBox; // Declaração de um JComboBox para exibir produtos
+    List<Produto> produtos; // Lista para armazenar produtos
 
+    // Construtor da classe
     public VendasView() {
-        super();
-        produtosComboBox = new JComboBox<>();
-        produtos = new ProdutoDAO().listarTodos();
-        produtosComboBox.addItem("Selecione o Produto");
+        super(); // Chama o construtor da classe pai (JPanel)
+
+        produtosComboBox = new JComboBox<>(); // Inicializa o JComboBox
+        produtos = new ProdutoDAO().listarTodos(); // Obtém a lista de produtos do banco de dados
+        produtosComboBox.addItem("Selecione o Produto"); // Adiciona um item inicial ao JComboBox
+
+        // Preenche o JComboBox com nomes de produtos e códigos de barras
         for (Produto produto : produtos) {
             produtosComboBox.addItem(
                     produto.getNome()
                             + " " + produto.getCodigoBarras()
             );
         }
-        add(produtosComboBox);
+
+        add(produtosComboBox); // Adiciona o JComboBox ao painel
     }
 }
