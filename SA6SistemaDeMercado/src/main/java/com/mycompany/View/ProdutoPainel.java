@@ -5,6 +5,7 @@
  */
 package com.mycompany.View;
 
+import com.mycompany.Connection.ProdutoDAO;
 import com.mycompany.Controller.ProdutoControl;
 import com.mycompany.Model.Produto;
 
@@ -16,6 +17,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class ProdutoPainel extends JPanel {
+
     // Campos de texto para inserção de dados do produto
     private JTextField codigoBarrasField, nomeField, precoField, quantidadeField;
 
@@ -70,6 +72,9 @@ public class ProdutoPainel extends JPanel {
         table = new JTable(tableModel);
         jScrollPane.setViewportView(table);
 
+        // Atualiza a tabela com os dados mais recentes do banco de dados
+        atualizarTabela();
+
         // Adiciona um ouvinte de mouse para a tabela
         table.addMouseListener(new MouseAdapter() {
             @Override
@@ -79,7 +84,7 @@ public class ProdutoPainel extends JPanel {
                     // Atualiza os campos com os dados da linha selecionada
                     codigoBarrasField.setText((String) table.getValueAt(linhaSelecionada, 0));
                     nomeField.setText((String) table.getValueAt(linhaSelecionada, 1));
-                    precoField.setText((String) table.getValueAt(linhaSelecionada, 2));
+                    precoField.setText(table.getValueAt(linhaSelecionada, 2).toString());
                     quantidadeField.setText(table.getValueAt(linhaSelecionada, 3).toString());
                 }
             }
@@ -112,5 +117,24 @@ public class ProdutoPainel extends JPanel {
             precoField.setText("");
             quantidadeField.setText("");
         });
+    }
+
+    // Método para atualizar a tabela com os dados mais recentes do banco de dados
+    private void atualizarTabela() {
+        // Obtém a lista de todos os produtos do banco de dados usando o ProdutoDAO
+        List<Produto> produtos = new ProdutoDAO().listarTodos();
+        // Atualiza o modelo de tabela com os dados obtidos
+        atualizarTableModel(produtos);
+    }
+
+    // Método privado para atualizar o modelo de tabela com uma lista de produtos
+    private void atualizarTableModel(List<Produto> produtos) {
+        // Limpa todas as linhas existentes na tabela
+        tableModel.setRowCount(0);
+        // Adiciona as novas linhas com os dados dos produtos à tabela
+        for (Produto produto : produtos) {
+            tableModel.addRow(new Object[]{produto.getCodigoBarras(), produto.getNome(),
+                produto.getPreco(), produto.getQuantidade()});
+        }
     }
 }

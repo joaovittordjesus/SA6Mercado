@@ -1,6 +1,3 @@
-/*
- * Esta classe é responsável por controlar as interações entre a interface de usuário (tabela) e a camada de persistência de dados (DAO).
- */
 package com.mycompany.Controller;
 
 import com.mycompany.Connection.ProdutoDAO;
@@ -35,8 +32,13 @@ public class ProdutoControl {
         tableModel.setRowCount(0);
         // Adiciona as novas linhas com os dados dos produtos à tabela
         for (Produto produto : produtos) {
+            // Convertendo o preço para String formatada
+            String precoFormatado = String.format("%.2f", produto.getPreco());
+            // Convertendo a quantidade para String
+            String quantidadeString = String.valueOf(produto.getQuantidade());
+
             tableModel.addRow(new Object[]{produto.getCodigoBarras(), produto.getNome(),
-                    produto.getPreco(), produto.getQuantidade()});
+                    precoFormatado, quantidadeString});
         }
     }
 
