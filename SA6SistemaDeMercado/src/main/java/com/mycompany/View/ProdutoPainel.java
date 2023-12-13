@@ -22,7 +22,7 @@ public class ProdutoPainel extends JPanel {
     private JTextField codigoBarrasField, nomeField, precoField, quantidadeField;
 
     // Botões de ação
-    private JButton cadastrar, apagar;
+    private JButton cadastrar, apagar, editar; 
 
     // Tabela para exibir os produtos
     private JTable table;
@@ -62,6 +62,7 @@ public class ProdutoPainel extends JPanel {
         JPanel botoes = new JPanel();
         botoes.add(cadastrar = new JButton("Cadastrar"));
         botoes.add(apagar = new JButton("Apagar"));
+        botoes.add(editar = new JButton("Editar"));
         add(botoes);
 
         // Adiciona uma tabela para exibir os produtos
@@ -74,7 +75,8 @@ public class ProdutoPainel extends JPanel {
 
         // Atualiza a tabela com os dados mais recentes do banco de dados
         atualizarTabela();
-
+       
+       /////         
         // Adiciona um ouvinte de mouse para a tabela
         table.addMouseListener(new MouseAdapter() {
             @Override
@@ -89,6 +91,7 @@ public class ProdutoPainel extends JPanel {
                 }
             }
         });
+        //////
 
         // Cria uma instância do controlador de produtos
         ProdutoControl operacoes = new ProdutoControl(tableModel, table);
